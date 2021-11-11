@@ -1,9 +1,51 @@
 {
   "name": "fino",
   "version": "1.0.0",
-  "main": "index.ts",
   "repository": "https://github.com/anwyho/fino",
   "author": "Anthony Ho <anwyho@gmail.com>",
   "license": "MIT",
-  "private": false
+  "scripts": {
+    "build": "tsc --build tsconfig.json",
+    "clean": "[ -d dist ] && mv dist dist.bak || exit 0",
+    "coverage": "jest --silent && codecov",
+    "dev:start": "nodemon | pino-pretty",
+    "lint": "ts-standard",
+    "rebuild": "yarn clean && yarn build",
+    "start": "ts-node src/index.ts",
+    "test": "jest"
+  },
+  "nodemonConfig": {
+    "watch": [
+      "src"
+    ],
+    "ext": "ts",
+    "ignore": [
+      "*.spec.ts"
+    ]
+  },
+  "ts-standard": {
+    "project": "./tsconfig.json",
+    "ignore": [
+      "src/**/*.spec.ts",
+      "jest.config.ts"
+    ]
+  },
+  "dependencies": {
+    "@notionhq/client": "^0.4.6",
+    "dotenv": "^10.0.0",
+    "typescript": "^4.4.4"
+  },
+  "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
+    "@types/jest": "^27.0.2",
+    "@types/node": "^16.11.7",
+    "codecov": "^3.8.3",
+    "jest": "^27.3.1",
+    "nodemon": "^2.0.15",
+    "pino": "^7.2.0",
+    "pino-pretty": "^7.2.0",
+    "ts-jest": "^27.0.7",
+    "ts-node": "^10.4.0",
+    "ts-standard": "^10.0.0"
+  }
 }

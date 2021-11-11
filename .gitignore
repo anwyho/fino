@@ -120,3 +120,5 @@ dist
 # local workspace
 .idea
 .vscode
+.DS_Store
+dist.bak
