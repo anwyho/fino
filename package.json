@@ -1,0 +1,9 @@
+{
+  "name": "fino",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "repository": "https://github.com/anwyho/fino",
+  "author": "Anthony Ho <anwyho@gmail.com>",
+  "license": "MIT",
+  "private": false
+}
