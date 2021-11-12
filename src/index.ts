@@ -3,40 +3,49 @@ import addItem from './helpers/notion_demo';
 
 logger.info('started server');
 
+const sleep = (delayMs: number): Promise<void> =>
+  new Promise(resolve => setTimeout(resolve, delayMs));
+const standardTimeoutDurationMs = (): number => 6000;
+const earlyTimeoutDurationMs = (): number => 500;
+type resolveEarlyCallback = () => Promise<boolean>;
+
 let iteration = 0;
 
-// TODO: This should switch up timeouts based on recency of successful poll and maybe time of day
-//  How does this work if the setTimeout has already started? Can we return true early?
-const nextTimeout = async (): Promise<boolean> => {
-  const timeoutDuration = 6000;
-  return await new Promise(resolve => {
-    setTimeout(() => {
-      iteration += 1;
-      logger.info(`standard ${iteration}`);
-      resolve(true);
-    }, timeoutDuration);
-    // while(
-    setTimeout(() => {
-      resolveEarly().then(shouldResolveEarly => {
-        if (shouldResolveEarly) {
-          iteration += 1;
-          logger.info(`early ${iteration}`);
-          shouldResolveEarly && resolve(true);
-        }
+const nextTimeout = async (
+  resolveEarlyCb?: resolveEarlyCallback
+): Promise<boolean> => {
+  return new Promise(resolve => {
+    // These two resolve calls compete with each other.
+    // The first checks for
+    // if (resolveEarlyCb) sleep(earlyTimeoutDurationMs()).then(() => { resolveEarly().then((shouldResolve) => shouldResolve && resolve(true)) })
+    // sleep(standardTimeoutDurationMs()).then(() => { resolve(true) })
+
+    iteration += 1;
+    const curIteration = iteration;
+    if (resolveEarlyCb) {
+      sleep(earlyTimeoutDurationMs()).then(() => {
+        resolveEarlyCb().then(shouldResolve => {
+          if (shouldResolve) {
+            console.log(`early ${curIteration}`);
+            resolve(true);
+          }
+        });
       });
-    }, 1000);
-    // ) {}
+    }
+    sleep(standardTimeoutDurationMs()).then(() => {
+      console.log(`standard ${curIteration}`);
+      resolve(true);
+    });
   });
 };
 
-const resolveEarly = async (): Promise<boolean> => {
-  // return await new Promise(resolve => setTimeout(() => { resolve(true) }, 2000))
-  logger.info('asked if should resolve early');
-  return Math.random() > 0.5;
+const shouldResolveEarly = async (): Promise<boolean> => {
+  return Math.random() > 0.2;
 };
 
 const poll = async (): Promise<void> => {
   logger.info('polling...');
+  await sleep(100);
 };
 
 async function poller(): Promise<void> {
@@ -44,7 +53,7 @@ async function poller(): Promise<void> {
     logger.info('starting poller');
     do {
       await poll();
-    } while (await nextTimeout());
+    } while (await nextTimeout(shouldResolveEarly));
   } else {
     logger.info("didn't start poller - not called as main");
   }
