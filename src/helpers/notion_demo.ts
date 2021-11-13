@@ -1,7 +1,6 @@
-import { Client } from '@notionhq/client/build/src'
+import { notion } from '../config'
 import { CreatePageResponse } from '@notionhq/client/build/src/api-endpoints'
 
-const notion = new Client({ auth: process.env.NOTION_KEY })
 const databaseId = process.env.NOTION_DATABASE_ID ?? ''
 
 async function addItem (text: string): Promise<CreatePageResponse> {
