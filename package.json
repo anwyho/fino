@@ -19,6 +19,12 @@
     "pretest": "yarn run compile",
     "posttest": "yarn run lint"
   },
+  "eslintConfig": {
+    "extends": "./node_modules/gts/"
+  },
+  "eslintIgnore": [
+    "build/"
+  ],
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
@@ -38,10 +44,7 @@
     "watch": [
       "src"
     ],
-    "ext": "ts",
-    "ignore": [
-      "*_spec.ts"
-    ]
+    "ext": "ts"
   },
   "dependencies": {
     "@notionhq/client": "^0.4.6",
