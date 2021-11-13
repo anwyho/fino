@@ -46,6 +46,7 @@
     ],
     "ext": "ts"
   },
+  "prettier": "gts/.prettierrc.json",
   "dependencies": {
     "@notionhq/client": "^0.4.6",
     "dotenv": "^10.0.0",
