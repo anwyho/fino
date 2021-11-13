@@ -6,18 +6,28 @@
   "license": "MIT",
   "scripts": {
     "build": "tsc --build tsconfig.json",
-    "clean": "[ -d dist ] && mv dist dist.bak || exit 0",
+    "clean": "[ -d build ] && mv build build.bak || exit 0",
     "coverage": "jest --silent && codecov",
     "dev:start": "nodemon | pino-pretty",
-    "lint": "ts-standard",
+    "lint": "gts lint",
     "rebuild": "yarn clean && yarn build",
     "start": "ts-node src/index.ts",
-    "test": "jest"
+    "test": "jest",
+    "compile": "tsc",
+    "fix": "gts fix",
+    "prepare": "yarn run compile",
+    "pretest": "yarn run compile",
+    "posttest": "yarn run lint"
   },
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node",
-    "modulePathIgnorePatterns": ["dist"],
+    "testMatch": [
+      "**/spec/**/*_spec.ts"
+    ],
+    "modulePathIgnorePatterns": [
+      "build"
+    ],
     "collectCoverage": true,
     "coverageDirectory": "coverage",
     "collectCoverageFrom": [
@@ -30,34 +40,33 @@
     ],
     "ext": "ts",
     "ignore": [
-      "*.spec.ts"
-    ]
-  },
-  "ts-standard": {
-    "project": "./tsconfig.json",
-    "ignore": [
-      "src/**/*.spec.ts",
-      "jest.config.ts"
+      "*_spec.ts"
     ]
   },
   "dependencies": {
     "@notionhq/client": "^0.4.6",
     "dotenv": "^10.0.0",
-    "moment": "^2.29.1",
-    "typescript": "^4.4.4"
+    "moment": "^2.29.1"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.1",
+    "@types/dotenv": "^8.2.0",
     "@types/jest": "^27.0.2",
+    "@types/moment": "^2.13.0",
     "@types/node": "^16.11.7",
+    "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
     "codecov": "^3.8.3",
+    "eslint": "^8.2.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-prettier": "^4.0.0",
+    "gts": "^3.1.0",
     "jest": "^27.3.1",
     "nodemon": "^2.0.15",
     "pino": "^7.2.0",
     "pino-pretty": "^7.2.0",
+    "prettier": "^2.4.1",
     "ts-jest": "^27.0.7",
     "ts-node": "^10.4.0",
-    "ts-standard": "^10.0.0"
+    "typescript": "^4.4.4"
   }
 }
