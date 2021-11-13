@@ -35,7 +35,6 @@ jobs:
           CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
           NOTION_DATABASE_ID: ${{ secrets.NOTION_DATABASE_ID }}
           NOTION_KEY: ${{ secrets.NOTION_KEY }}
-          LOG_LEVEL: fatal
 
       - name: Lint
         run: yarn lint
