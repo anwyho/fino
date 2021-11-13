@@ -7,7 +7,7 @@
   "scripts": {
     "build": "tsc --build tsconfig.json",
     "clean": "[ -d build ] && mv build build.bak || exit 0",
-    "coverage": "jest --silent && codecov",
+    "coverage": "jest --silent && codecov --disable=gcov",
     "dev:start": "nodemon | pino-pretty",
     "lint": "gts lint",
     "rebuild": "yarn clean && yarn build",
