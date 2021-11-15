@@ -9,12 +9,13 @@ type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 const logLevel: LogLevel = (process.env.LOG_LEVEL ?? 'info') as LogLevel;
 
 export const logger = pino({level: logLevel});
+export const notionLogger = logger.child({module: 'notion'});
 
 const notionLoggerAdapter = (
   logLevel: NotionLogLevel,
   message: string,
   extraInfo: Record<string, unknown>
-): void => logger[logLevel as LogLevel](extraInfo, message);
+): void => notionLogger[logLevel as LogLevel](extraInfo, message);
 
 export const notion = new Client({
   auth: process.env.NOTION_KEY,
